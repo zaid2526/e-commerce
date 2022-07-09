@@ -1,0 +1,25 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'poppins';
+    box-sizing: border-box;
+}
+body{
+    background-color: rgb(190, 187, 206);
+}
+.container{
+    position: fixed;
+    top: 5px;
+    right: 5px;
+    height: 5px;
+    width: 20rem;
+    margin: auto;
+
+}
+
+.toast{
+    background-color: rebeccapurple;
+    padding: 1rem;
+    color: white;
+    border-radius: 5px;
+}
