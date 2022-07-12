@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap');
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+#tours .tour-item{
+    display:flex;
+    border-bottom:1px solid black;
+    padding:10px;
+}
+#tours .tour-item .tour-date{
+    width:12%;
+}
+#tours .tour-item .tour-place{
+    width:25%;
+    color:#777;
+}
+#tours .tour-item .tour-spec-place{
+    width:53%;
+    color:#777;
+}
+#tours .tour-item .buy-btn{
+    width:20%;
+    background: #56CCF2;
+    color:white;
+    border:none;
+    padding:7px;
+    border-radius:5px;
+    font-weight:700;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+section h2{
+    font-family:"Metal Mania";
+    text-align:center;
+    padding:20px;
+    font-size:30px;
+}
+.container{
+    max-width:900px;
+    margin:0 auto;
+    padding:20px 30px;
+}
+#music-content{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:space-around;
+}
+#music-content div{
+    margin:30px;
+}
+#music-content div h3{
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+}
+#music-content .prod-details{
+    display: flex;
+    margin: 8px;
+    align-items: center;
+    justify-content: space-between;
+}
+#music-content .shop-item-button{
+    cursor:pointer;
+    padding:8px;
+    color:white;
+    border:none;
+    font-size:15px;
+    font-weight: bold;
+    border-radius: 4%;
+    background: #e7c52e;
+}
+#music-content .shop-item-button:hover, #merch-content .shop-item-button:hover{
+    background: #b4950b;
+}
+#merch-content{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:space-around;
+}
+#merch-content div{
+    margin:30px;
+}
+#merch-content div h3{
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+}
+#merch-content .prod-details{
+    display:flex;
+    margin:8px;
+    align-items:center;
+    justify-content: space-between;
+}
+#merch-content .shop-item-button{
+    cursor:pointer;
+    padding:8px;
+    color:white;
+    border:none;
+    font-size:15px;
+    font-weight: bold;
+    border-radius: 4%;
+    background: #e7c52e;
+}
+
+
+.image-container{
+    height: 250px;
+    width: 250px;
+    overflow: hidden;
+}
+.prod-images{
+    transform-origin: center center;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    padding:0px;
+    margin:0px;
+    transition: ease-in 0.5s;
+    filter: brightness(100%);
+}
+.prod-images:hover{
+    transform: scale(1.5);
+    filter: brightness(130%);
+}
+
+
