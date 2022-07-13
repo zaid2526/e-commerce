@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href='css/header.css'>
     <link rel="stylesheet" href='css/cart.css'>
+    <link rel="stylesheet" href="css/cart-table.css">
+    <link rel="stylesheet" href="css/notification.css">
     <link rel="stylesheet" href='css/footer.css'>
 
 </head>
@@ -16,8 +18,10 @@
     <div id="EcommerceContainer">
         <header>
             <ul class='header'>
+                <li><a href="./index.html">HOME</a></li>
                 <li><a href="#">STORE</a></li>
-                <a href="#cart" class="cart-holder">cart<span class='cart-number'>0</span></a>
+                <li><a href="./about.html">ABOUT</a></li>
+                <a href="#cart" class="cart-holder">cart<span id="cart-items" class='cart-number'>0</span></a>
             </ul>
             <h1>Z Mart</h1>
         </header>
@@ -93,16 +97,26 @@
             </div>
 
         </section>
+    <!-- cart section -->
         <section id="cart" class="container">
             <h2>CART</h2>
             <button class="cancel">X</button>
-            <div class="cart-row cart-header">
+            <!-- <div class="cart-row cart-header">
                 <span class='cart-item cart-column'>ITEM</span>
                 <span class='cart-price cart-column'>PRICE</span>
                 <span class='cart-quantity cart-column'>QUANTITY</span>
-            </div>
-            <div class='cart-items'>
+            </div> -->
+            <table>
                 
+            </table>
+            <div class='cart-items'>
+                <table id="cart-table">
+                    <tr>
+                        <th>ITEM</th>
+                        <th>PRICE</th>
+                        <th>QUANTITY</th>
+                      </tr>
+                </table>
             </div>
             <div class="cart-total">
                 <span>
@@ -114,7 +128,7 @@
             <button class='purchase-btn' type='button'>PURCHASE</button>
         </section>
 
-
+        <button class="cart-btn-bottom"> <a href="#cart" class="cart-bottom">See the cart</a></button>
     </div>
     <!-- Toggle notification -->
     <div id="container"></div>

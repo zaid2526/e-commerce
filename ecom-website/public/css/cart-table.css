@@ -1,0 +1,25 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    background-color: #04AA6D;
+    color: white;
+}
+
+th,td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+td{
+    text-align: center;
+}
+
+/* tr:not(:first-child):hover {
+    background-color: coral;
+} */
+tr:hover {
+    background-color: coral;
+} 
