@@ -15,6 +15,7 @@ th,td {
 }
 td{
     text-align: center;
+
 }
 
 /* tr:not(:first-child):hover {

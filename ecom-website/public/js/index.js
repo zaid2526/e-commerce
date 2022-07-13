@@ -1,6 +1,8 @@
 const parentContainer = document.getElementById('EcommerceContainer');
 parentContainer.addEventListener('click', (e) => {
     
+    let total_cart_price = document.querySelector('#total-value').innerText;
+
     // adding to cart
     if (e.target.className=='shop-item-button'){
         // fetching the clicked product details
@@ -18,7 +20,7 @@ parentContainer.addEventListener('click', (e) => {
         }
     */
         //one or more item will be added.. max quantity is 3....
-        let total_cart_price = document.querySelector('#total-value').innerText;
+        // let total_cart_price = document.querySelector('#total-value').innerText;
         if (document.getElementById(`${name}`)) {
             let quantity = document.getElementById(`${name}`).innerText
             if (quantity >= 3) {
@@ -26,11 +28,11 @@ parentContainer.addEventListener('click', (e) => {
                 return;
             }
             document.getElementById(`${name}`).innerText = +quantity + 1
-            total_cart_price = (+total_cart_price) + (+price)
+            total_cart_price = parseFloat(total_cart_price) + parseFloat(price)
             document.querySelector('#total-value').innerText = total_cart_price;
         } else {
 
-            total_cart_price = (+total_cart_price) + (+price)
+            total_cart_price = parseFloat(total_cart_price) + parseFloat(price)
             document.querySelector('#total-value').innerText = total_cart_price;
 
             const tr = document.createElement('tr')
@@ -45,9 +47,16 @@ parentContainer.addEventListener('click', (e) => {
             tr.appendChild(td_price);
 
             const td_quantity = document.createElement("td");
-            td_quantity.setAttribute('id', `${name}`)
-            const item_quantity = document.createTextNode(1);
+            
+            // const item_quantity = document.createTextNode(1);
+            const item_quantity = document.createElement('span');
+            item_quantity.setAttribute('id', `${name}`)
+            item_quantity.appendChild(document.createTextNode(1))
             td_quantity.appendChild(item_quantity);
+            const remove_btn=document.createElement('button');
+            remove_btn.classList.add('danger-btn');
+            remove_btn.appendChild(document.createTextNode('X'))
+            td_quantity.appendChild(remove_btn);
             tr.appendChild(td_quantity);
 
             document.getElementById('cart-table').appendChild(tr);
@@ -63,7 +72,7 @@ parentContainer.addEventListener('click', (e) => {
         setTimeout(()=>{
             toast_noftification.remove();
         },2000)
-        console.log(document.getElementById(`${name}`).innerText);
+        // console.log(document.getElementById(`${name}`).innerText);
         document.getElementById('cart-items').innerText = parseInt(document.getElementById('cart-items').innerText)+1
 
     }
@@ -72,5 +81,24 @@ parentContainer.addEventListener('click', (e) => {
     }
     if (e.target.className=='cancel'){
         document.querySelector('#cart').style = "display:none;"
+    }
+    if(e.target.className=='danger-btn'){
+        console.log("item will be delete");
+        const id = e.target.parentNode.firstElementChild.id
+        let quantity = document.getElementById(`${id}`).innerText
+        const tr = e.target.parentNode.parentNode;
+        const price=tr.getElementsByTagName('td')[1].innerText
+        if (quantity <= 1) {
+            document.querySelector('#total-value').innerText=parseFloat(total_cart_price) - parseFloat(price)
+            console.log(price);
+            tr.remove()
+        } else {
+            document.getElementById(`${id}`).innerText = +quantity - 1
+            console.log(price);
+            document.querySelector('#total-value').innerText=parseFloat(total_cart_price) - parseFloat(price)
+        }
+     
+
+
     }
 })
