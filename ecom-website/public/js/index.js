@@ -1,7 +1,7 @@
 const parentContainer = document.getElementById('EcommerceContainer');
 
 const parentNode = document.getElementById('music-content');
-
+let total_cart_price = document.querySelector('#total-value').innerText;
 window.addEventListener('load', () => {
     console.log('loaded');
     axios.get('http://localhost:3033/products').then((products) => {
@@ -24,7 +24,7 @@ window.addEventListener('load', () => {
 
 })
 parentContainer.addEventListener('click', (e) => {
-    let total_cart_price = document.querySelector('#total-value').innerText;
+    // let total_cart_price = document.querySelector('#total-value').innerText;
     // adding to cart....
     if (e.target.className=='shop-item-button'){
         // fetching the clicked product details
@@ -34,10 +34,18 @@ parentContainer.addEventListener('click', (e) => {
 
         notification(id);
 
-        document.getElementById('cart-items').innerText = parseInt(document.getElementById('cart-items').innerText)+1
+        // document.getElementById('cart-items').innerText = parseInt(document.getElementById('cart-items').innerText)+1
     }
     //display cart slider.....
     if (e.target.className == 'cart-holder' || e.target.className=='cart-bottom' || e.target.className=='cart-btn-bottom') {
+        axios.get('http://localhost:3033/cart')
+            .then(products=>{
+                showItemOnCart(products.data)
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+        
         document.querySelector('#cart').style = "display:block;"
     }
     //closing cart slider......
@@ -46,9 +54,17 @@ parentContainer.addEventListener('click', (e) => {
     }
     //remove item from cart.....
     if(e.target.className=='danger-btn'){
-        const id = e.target.parentNode.firstElementChild.id;
+        const id = e.target.parentNode.lastElementChild.id;
         const tr = e.target.parentNode.parentNode;
-        removeFromCart(id,tr,total_cart_price);
+        axios.post('http://localhost:3033/delete-cart-item',{productId:id})
+        .then(remainProduct=>{
+            removeFromCart(id,tr,remainProduct.data);
+            // showItemOnCart(remainProduct.data)
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+        
     }
 })
 
@@ -133,16 +149,51 @@ function notification(id){
     },2000)
 }
 
-function removeFromCart(id,item,total_cart_price) {
-    let quantity = document.getElementById(`${id}`).innerText;
-    const price = item.getElementsByTagName('td')[1].innerText;
-    if (quantity <= 1) {
-        document.querySelector('#total-value').innerText = parseFloat(total_cart_price).toFixed(2) - parseFloat(price)
-        item.remove()
-    } else {
-        document.getElementById(`${id}`).innerText = +quantity - 1
-        document.querySelector('#total-value').innerText = parseFloat(total_cart_price).toFixed(2) - parseFloat(price)
-    }
+function showItemOnCart(products) {
+    // let cartItem=document.querySelectorAll(`#cart-table tr`);
+    // console.log("cart",cartItem);
+    products.forEach(product => {
+        const id = `album-${product.id}`;
+        const name = product.title;
+        const img_src = product.imageUrl;
+        const price = product.price;
+        const quantity = product.qty;
+        const tr = document.createElement('tr')
+        tr.innerHTML = `
+                <td>${name}</td>
+                <td>${price}</td>
+                <td id="${name}">
+                    <span>${quantity}</span>
+                    <button id=${product.id} class="danger-btn">
+                        X</button>
+                </td>`
+        total_cart_price = +total_cart_price + quantity * price;
+        document.querySelector('#total-value').innerText = parseFloat(+total_cart_price).toFixed(2)
+
+        document.getElementById('cart-table').appendChild(tr);
+        // cartItem.appendChild(tr);
+
+    })
+
+}
+
+function removeFromCart(id,tr,remainProduct) {
+    let total_cart_price=0;
+    let qty=tr.lastElementChild.innerText.split(' ')[0];
+            const name=tr.firstElementChild.innerText;
+            if(qty<=1){
+                tr.remove();
+            }else{
+                qty=qty-1;
+                document.getElementById(`${name}`).innerHTML=`
+                            <span>${qty}</span>
+                            <button id=${id} class="danger-btn">
+                    X</button>`
+            }
+            remainProduct.forEach(product=>{
+                total_cart_price = +total_cart_price + product.qty*product.price;
+            })
+            document.querySelector('#total-value').innerText=parseFloat(+total_cart_price).toFixed(2)
 }
 
 

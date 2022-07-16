@@ -3,9 +3,15 @@ const path = require('path');
 const express = require('express');
 const bodyParser=require('body-parser')
 
-
 const sequelize = require('./util/database');
+const Product=require('./models/product');
+const Cart=require('./models/cart');
+const CartItem=require('./models/cart-item');
+
+
 const shopRoutes=require('./routes/shop')
+
+
 
 
 const staticPath=path.join(__dirname,'..','public')
@@ -17,7 +23,9 @@ app.use(shopRoutes);
 
 
 
+
 sequelize
+    // .sync({force:true})
     .sync()
     .then((result)=>{
         // console.log(result);

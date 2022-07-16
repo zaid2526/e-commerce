@@ -10,10 +10,7 @@ const Cart = sequelize.define('cart', {
     primaryKey: true
   },
   title: Sequelize.STRING,
-  price: {
-    type: Sequelize.INTEGER,
-    allowNull: false
-  },
+  price:Sequelize.INTEGER,
   qty:Sequelize.INTEGER
 
 });

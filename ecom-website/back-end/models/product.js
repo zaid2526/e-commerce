@@ -14,7 +14,7 @@ const Product = sequelize.define('product', {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  imageUrl: Sequelize.STRING,
+  imageUrl: Sequelize.STRING
 });
 
 module.exports = Product;

@@ -12,7 +12,12 @@ exports.getProducts = (req, res, next) => {
     
 
 };
-
+exports.getCart=(req,res,next)=>{
+  Cart.findAll()
+    .then(products=>{
+      res.json(products)
+    })
+}
 exports.postCart = (req, res, next) => {
   const prodId = req.body.prodId;
   
@@ -38,8 +43,11 @@ exports.postCart = (req, res, next) => {
             product.title=title;
             product.price=price;
             product.qty=product.qty +1
-            product.save();
+            return product.save();
           }
+        })
+        .then(result=>{
+          // console.log(result);
         })
         .catch(err=>{console.log(err);})
       }
@@ -47,5 +55,27 @@ exports.postCart = (req, res, next) => {
     .catch(err => {
       console.log(err);
     })
+}
 
+exports.deleteCartItem=(req,res,next)=>{
+  const prodId = req.body.productId;
+  Cart.findByPk(prodId)
+    .then(product=>{
+      if(product.qty<=1){
+         return Cart.destroy({where:{id:prodId}})
+      }
+      product.qty=product.qty-1;
+      return product.save();
+    })
+    .then(data=>{
+      // console.log(">>>>>>>>>>",data);
+      return Cart.findAll();
+    })
+    .then(products=>{
+      res.json(products)
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  
 }
