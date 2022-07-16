@@ -5,7 +5,7 @@ let total_cart_price = document.querySelector('#total-value').innerText;
 window.addEventListener('load', () => {
     console.log('loaded');
     axios.get('http://localhost:3033/products').then((products) => {
-        console.log(products)
+        // console.log(products)
         products.data.forEach(product => {
             const productHtml = `
                 <div id="album-${product.id}">
@@ -29,9 +29,8 @@ parentContainer.addEventListener('click', (e) => {
     if (e.target.className=='shop-item-button'){
         // fetching the clicked product details
         const id = e.target.parentNode.parentNode.id
-         console.log(id[id.length-1]);
+        //  console.log(id[id.length-1]);
         addToCart(id[id.length-1]);
-
         notification(id);
 
         // document.getElementById('cart-items').innerText = parseInt(document.getElementById('cart-items').innerText)+1
@@ -56,10 +55,11 @@ parentContainer.addEventListener('click', (e) => {
     if(e.target.className=='danger-btn'){
         const id = e.target.parentNode.lastElementChild.id;
         const tr = e.target.parentNode.parentNode;
+        // console.log(tr);
         axios.post('http://localhost:3033/delete-cart-item',{productId:id})
         .then(remainProduct=>{
-            removeFromCart(id,tr,remainProduct.data);
-            // showItemOnCart(remainProduct.data)
+            // removeFromCart(id,tr,remainProduct.data);
+            showItemOnCart(remainProduct.data)
         })
         .catch(err=>{
             console.log(err);
@@ -129,12 +129,12 @@ parentContainer.addEventListener('click', (e) => {
 function addToCart(id){
     axios.post('http://localhost:3033/cart',{prodId:id})
         .then(data=>{
-            console.log(data);
+            // console.log("addto",data);
+            showItemOnCart(data.data)
         })
         .catch(err=>{
             console.log(err);
         })
-
 }
 function notification(id){
     //getting product name
@@ -150,12 +150,14 @@ function notification(id){
 }
 
 function showItemOnCart(products) {
-    // let cartItem=document.querySelectorAll(`#cart-table tr`);
-    // console.log("cart",cartItem);
+    let total_cart_price=0;
+    const th=document.querySelector('#cart-table tr');
+    let cartTable=document.getElementById('cart-table');
+    cartTable.innerHTML=` `;
     products.forEach(product => {
-        const id = `album-${product.id}`;
+        // const id = `album-${product.id}`;
+        // const img_src = product.imageUrl;
         const name = product.title;
-        const img_src = product.imageUrl;
         const price = product.price;
         const quantity = product.qty;
         const tr = document.createElement('tr')
@@ -168,32 +170,35 @@ function showItemOnCart(products) {
                         X</button>
                 </td>`
         total_cart_price = +total_cart_price + quantity * price;
-        document.querySelector('#total-value').innerText = parseFloat(+total_cart_price).toFixed(2)
-
-        document.getElementById('cart-table').appendChild(tr);
-        // cartItem.appendChild(tr);
-
+        cartTable.appendChild(tr);
     })
+    document.querySelector('#total-value').innerText = parseFloat(+total_cart_price).toFixed(2)
+    cartTable.prepend(th);
 
 }
 
-function removeFromCart(id,tr,remainProduct) {
-    let total_cart_price=0;
-    let qty=tr.lastElementChild.innerText.split(' ')[0];
-            const name=tr.firstElementChild.innerText;
-            if(qty<=1){
-                tr.remove();
-            }else{
-                qty=qty-1;
-                document.getElementById(`${name}`).innerHTML=`
-                            <span>${qty}</span>
-                            <button id=${id} class="danger-btn">
-                    X</button>`
-            }
-            remainProduct.forEach(product=>{
-                total_cart_price = +total_cart_price + product.qty*product.price;
-            })
-            document.querySelector('#total-value').innerText=parseFloat(+total_cart_price).toFixed(2)
-}
+/*......... instead of this we use only the showitemonCart(products)method
+ products get from the cart and show.. (ie we do not need 
+ removeFromCart()......)     .......*/
+
+
+// function removeFromCart(id,tr,remainProduct) {
+//     let total_cart_price=0;
+//     let qty=tr.lastElementChild.innerText.split(' ')[0];
+//             const name=tr.firstElementChild.innerText;
+//             if(qty<=1){
+//                 tr.remove();
+//             }else{
+//                 qty=qty-1;
+//                 document.getElementById(`${name}`).innerHTML=`
+//                             <span>${qty}</span>
+//                             <button id=${id} class="danger-btn">
+//                     X</button>`
+//             }
+//             remainProduct.forEach(product=>{
+//                 total_cart_price = +total_cart_price + product.qty*product.price;
+//             })
+//             document.querySelector('#total-value').innerText=parseFloat(+total_cart_price).toFixed(2)
+// }
 
 
