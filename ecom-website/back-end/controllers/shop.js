@@ -11,14 +11,48 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getCart=(req,res,next)=>{
-  Cart.findAll()
-    .then(products=>{
-      res.json(products)
+  // Cart.findAll()
+  //   .then(products=>{
+  //     res.json(products)
+  //   })
+  let limit=2;
+  let page=1
+  let offset= (page-1)*limit;
+  Cart.findAndCountAll({
+    offset:offset,
+    limit:limit
+  })
+  .then(products=>{
+    console.log("aa",products);
+    res.json(products)
+  })
+}
+exports.postCartPage=(req,res,next)=>{
+  let limit=1;
+  let page=+req.body.page || 1;
+  let offset=0 +(page-1)*limit;
+  Cart.findAndCountAll({
+    offset:offset,
+    limit:limit
+  })
+  .then(products=>{
+    res.json({
+      currentPage:page,
+      products:products,
+      hasNextPage:limit*page<products.count,
+      hasPreviousPage:page>1,
+      nextPage:page+1,
+      previousPage:page-1,
+      lastPage:Math.ceil(products.count/limit)
     })
+  })
+
 }
 
 exports.postCart = (req, res, next) => {
   const prodId = req.body.prodId;
+  
+  // console.log("aa",page);
   Product.findByPk(prodId)
     .then(product => {
       const id = product.id;

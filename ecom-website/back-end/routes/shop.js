@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/products', shopController.getProducts);
 router.get('/cart',shopController.getCart);
 router.post('/cart',shopController.postCart);
+router.post('/cartPage',shopController.postCartPage)
 router.post('/delete-cart-item',shopController.deleteCartItem)
 
 

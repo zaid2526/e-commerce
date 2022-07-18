@@ -36,16 +36,46 @@ parentContainer.addEventListener('click', (e) => {
         // document.getElementById('cart-items').innerText = parseInt(document.getElementById('cart-items').innerText)+1
     }
     //display cart slider.....
-    if (e.target.className == 'cart-holder' || e.target.className=='cart-bottom' || e.target.className=='cart-btn-bottom') {
-        axios.get('http://localhost:3033/cart')
+    if (e.target.className=='pagination' || e.target.className == 'cart-holder' || e.target.className=='cart-bottom' || e.target.className=='cart-btn-bottom') {
+        const page= e.target.innerText || 1;
+        const pageButton=document.querySelector(' div .pagination');
+        pageButton.innerHTML=` `;
+            axios.post('http://localhost:3033/cartPage',{page:page})
             .then(products=>{
-                showItemOnCart(products.data)
+                // console.log(products);
+                showItemOnCart(products.data.products.rows)
+                if(products.data.currentPage!=1 && products.data.previousPage!=1){
+                    pageButton.innerHTML=`
+                        <button class='pagination'>1</button>`
+                }
+                if(products.data.hasPreviousPage){
+                    pageButton.innerHTML=pageButton.innerHTML+ 
+                    `<button class='pagination'>${products.data.previousPage}</button>`
+                }
+
+                pageButton.innerHTML=pageButton.innerHTML+
+                    `<button class='pagination active'>${products.data.currentPage}</button>`
+                
+                if(products.data.hasNextPage){
+                    pageButton.innerHTML=pageButton.innerHTML+ 
+                    `<button class='pagination'>${products.data.nextPage}</button>`
+                }
+                if(products.data.lastPage!=products.data.currentPage 
+                    && products.data.nextPage!=products.data.lastPage){
+                        pageButton.innerHTML=pageButton.innerHTML+ 
+                        `<button class='pagination'>${products.data.lastPage}</button>`
+                }
+                    
+
+
+
             })
             .catch(err=>{
                 console.log(err);
             })
-        
         document.querySelector('#cart').style = "display:block;"
+        // }
+        
     }
     //closing cart slider......
     if (e.target.className=='cancel'){
@@ -60,12 +90,32 @@ parentContainer.addEventListener('click', (e) => {
         .then(remainProduct=>{
             // removeFromCart(id,tr,remainProduct.data);
             showItemOnCart(remainProduct.data)
+            
         })
         .catch(err=>{
             console.log(err);
         })
-        
     }
+    if(e.target.className=='pagination'){
+        const page=e.target.innerText;
+        
+        // if(page.length>2){
+        //     console.log('click on page button');
+        // }
+        // else{
+        //     axios.post('http://localhost:3033/cartPage',{page:page})
+        //     .then(products=>{
+        //         // console.log(products);
+        //         showItemOnCart(products.data.products.rows)
+        //     })
+        //     .catch(err=>{
+        //         console.log(err);
+        //     })  
+        // }
+        
+    // document.querySelector('#cart').style = "display:block";
+    }
+
 })
 
 // function addToCart(id){
