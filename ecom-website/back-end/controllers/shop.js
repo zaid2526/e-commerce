@@ -1,5 +1,6 @@
 const Product = require('../models/product');
-const Cart=require('../models/cart')
+const Cart=require('../models/cart');
+const Order=require('../models/order');
 
 
 exports.getProducts = (req, res, next) => {
@@ -108,4 +109,82 @@ exports.deleteCartItem=(req,res,next)=>{
     .catch(err=>{
       console.log(err);
     })
+}
+
+exports.postOrder=(req,res,next)=>{
+  let totalPrice=0
+  let id;
+  let title;
+  let price;
+  let qty;
+  Order.findAndCountAll()
+    .then(products=>{
+      if(products.count>0){
+        products.rows.forEach(product=>{
+          totalPrice=totalPrice+(product.qty*product.price);
+          Cart.destroy({where:{id:product.id}})
+        })
+        res.json(totalPrice);
+      }else{
+        Cart.findAll()
+        .then(products=>{
+          console.log("....",products);
+          products.forEach(product=>{
+            id = product.id;
+            title = product.title;
+            price = product.price;
+            qty = product.qty;
+            totalPrice=totalPrice+(product.price*product.qty);
+            Cart.destroy({where:{id:product.id}})
+            return Order.create({
+              id: id,
+              title: title,
+              price: price,
+              qty: qty
+            })
+          })
+        })
+        .then(result=>{
+          console.log("order placed");
+          res.json(totalPrice)
+        })
+      }
+    })
+    .catch(err=>{console.log(err);})
+
+
+  // Cart.findAll()
+  //   .then(products=>{
+  //     products.forEach(product=>{
+  //        id = product.id;
+  //        title = product.title;
+  //        price = product.price;
+  //        qty=product.qty;
+  //       totalPrice=totalPrice+(product.price*product.qty);
+  //       Order.findAndCountAll()
+  //         .then(products=>{
+  //           if(products.count>0){
+  //             console.log("order is already Palced");
+  //             res.json(totalPrice);
+  //           }
+  //           else{
+  //             return Order.create({
+  //               id: id,
+  //               title: title,
+  //               price: price,
+  //               qty: qty
+  //             })
+  //           }
+  //         })
+  //         .then(result=>{
+  //           console.log('order is created',result);
+  //           res.json(totalPrice)
+  //         })
+  //         .catch(err=>{console.log(err);})
+  //     }); 
+  //   })
+  //   .catch(err=>{
+  //     console.log(err);
+  //   })
+
 }
