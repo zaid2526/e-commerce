@@ -110,6 +110,13 @@ exports.deleteCartItem=(req,res,next)=>{
       console.log(err);
     })
 }
+exports.getOrders=(req,res,next)=>{
+  Order.findAll()
+    .then(products=>{
+      res.json(products);
+    })
+    .catch(err=>{console.log(err);})
+}
 
 exports.postOrder=(req,res,next)=>{
   let totalPrice=0
@@ -152,39 +159,5 @@ exports.postOrder=(req,res,next)=>{
     })
     .catch(err=>{console.log(err);})
 
-
-  // Cart.findAll()
-  //   .then(products=>{
-  //     products.forEach(product=>{
-  //        id = product.id;
-  //        title = product.title;
-  //        price = product.price;
-  //        qty=product.qty;
-  //       totalPrice=totalPrice+(product.price*product.qty);
-  //       Order.findAndCountAll()
-  //         .then(products=>{
-  //           if(products.count>0){
-  //             console.log("order is already Palced");
-  //             res.json(totalPrice);
-  //           }
-  //           else{
-  //             return Order.create({
-  //               id: id,
-  //               title: title,
-  //               price: price,
-  //               qty: qty
-  //             })
-  //           }
-  //         })
-  //         .then(result=>{
-  //           console.log('order is created',result);
-  //           res.json(totalPrice)
-  //         })
-  //         .catch(err=>{console.log(err);})
-  //     }); 
-  //   })
-  //   .catch(err=>{
-  //     console.log(err);
-  //   })
 
 }

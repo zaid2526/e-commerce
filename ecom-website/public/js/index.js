@@ -9,7 +9,7 @@ window.addEventListener('load', () => {
         products.data.forEach(product => {
             const productHtml = `
                 <div id="album-${product.id}">
-                    <h3>${product.title}</h3>
+                    <h3> ${product.title}</h3>
                     <div class="image-container">
                         <img class="prod-images" src=${product.imageUrl} alt="">
                     </div>
@@ -23,6 +23,7 @@ window.addEventListener('load', () => {
     })
 
 })
+
 parentContainer.addEventListener('click', (e) => {
     // let total_cart_price = document.querySelector('#total-value').innerText;
     // adding to cart....
@@ -132,6 +133,9 @@ parentContainer.addEventListener('click', (e) => {
     }
 
 })
+
+
+
 
 // function addToCart(id){
 //     const name = document.querySelector(`#${id} h3`).innerText;
