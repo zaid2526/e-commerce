@@ -8,11 +8,7 @@ const Order = sequelize.define('order', {
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
-  },
-  title: Sequelize.STRING,
-  price:Sequelize.INTEGER,
-  qty:Sequelize.INTEGER
-
+  }
 });
 
 module.exports = Order;

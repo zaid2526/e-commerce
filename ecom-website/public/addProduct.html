@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Add Produuct</title>
+    <link rel="stylesheet" href='css/header.css'>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href='css/footer.css'>
+    
+</head>
+
+<body>
+    
+    <header>
+        <ul class='header'>
+            <li class="text-red.600"><a href="./index.html">HOME</a></li>
+            <li><a href="./dynamicstore.html">STORE</a></li>
+            <li><a href="./orders.html">ORDERS</a></li>
+            <li><a href="./about.html">ABOUT</a></li>
+            <li><a href="#">Add Produuct</a></li>
+            
+        </ul>
+        <h1>Z Mart</h1>
+    </header>
+    <div>
+        <form class="form-horizontal">
+            <legend class="col-md-4">PRODUCTS</legend>
+            <label class="col-md-4">NAME</label>
+            <input class="form-control" type="text" id="title"><br>
+            <label class="col-md-4">PRICE</label>
+            <input class="form-control" type="text" id="price"><br>
+            <label class="col-md-4">IMAGE URL</label>
+            <input class="form-control" type="text" id="imageUrl"><br>
+            <button class="btn btn-primary" type="submit" id="add-btn">Add Produuct</button>
+        </form>
+    </div>
+
+    <!-- <form class="form-horizontal">
+        <fieldset >
+        
+
+        <legend>PRODUCTS</legend>
+
+        <div class="form-group">
+          <label class="col-md-4 control-label" for="product_name">PRODUCT NAME</label>  
+          <div class="col-md-4">
+          <input id="product_name" name="product_name" placeholder="PRODUCT NAME" class="form-control " required="" type="text">
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="product_price">PRODUCT PRICE</label>  
+            <div class="col-md-4">
+            <input id="product_price" name="product_price" placeholder="PRODUCT PRICE" class="form-control input-md" required="" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="image_url">IMAGE URL </label>  
+            <div class="col-md-4">
+            <input id="image_url" name="imageUrl" placeholder="image url" class="form-control input-md" required="" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-4">
+            <button id="add-btn" class="btn btn-primary">Button</button>
+          </div>
+        </div>
+        
+        </fieldset>
+    </form> -->
+    
+
+    <footer>
+        <div class="footer-title">
+            The Generics
+        </div>
+        <div class="footer-icons">
+            <ul>
+                <li><a href="https://www.youtube.com">
+                    <img src="./img/logo/youtube-logo.jpg" alt="">
+                </a></li>
+                <li><a href="https://spotify.com">
+                    <img src="./img/logo/spotify-logo.png" alt="">
+                </a></li>
+                <li><a href="https://facebook.com">
+                    <img src="./img/logo/fb-logo.png" alt="">
+                </a></li>
+            </ul>
+        </div>
+    </footer>
+    <script src="./js/addProduct.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js" integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</body>
+</html>

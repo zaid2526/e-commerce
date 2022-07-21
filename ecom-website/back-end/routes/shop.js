@@ -5,9 +5,10 @@ const shopController = require('../controllers/shop');
 const router = express.Router();
 
 router.get('/products', shopController.getProducts);
-router.get('/cart',shopController.getCart);
+router.post('/products',shopController.postProduct)
+// router.get('/cart',shopController.getCart);
 router.post('/cart',shopController.postCart);
-router.post('/cartPage',shopController.postCartPage);
+router.post('/cartPageByPage',shopController.postCartPage);
 router.post('/delete-cart-item',shopController.deleteCartItem);
 router.get('/getOrders',shopController.getOrders);
 router.post('/createOrder',shopController.postOrder);

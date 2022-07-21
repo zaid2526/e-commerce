@@ -4,11 +4,12 @@ const parentNode = document.getElementById('music-content');
 let total_cart_price = document.querySelector('#total-value').innerText;
 window.addEventListener('load', () => {
     console.log('loaded');
+    
     axios.get('http://localhost:3033/products').then((products) => {
         // console.log(products)
         products.data.forEach(product => {
             const productHtml = `
-                <div id="album-${product.id}">
+                <div id="item-${product.id}">
                     <h3> ${product.title}</h3>
                     <div class="image-container">
                         <img class="prod-images" src=${product.imageUrl} alt="">
@@ -30,57 +31,58 @@ parentContainer.addEventListener('click', (e) => {
     if (e.target.className=='shop-item-button'){
         // fetching the clicked product details
         const id = e.target.parentNode.parentNode.id
-        //  console.log(id[id.length-1]);
+         console.log(id[id.length-1]);
         addToCart(id[id.length-1]);
         notification(id);
-
         // document.getElementById('cart-items').innerText = parseInt(document.getElementById('cart-items').innerText)+1
     }
     //display cart slider.....
-    if (e.target.className=='pagination' || e.target.className == 'cart-holder' || e.target.className=='cart-bottom' || e.target.className=='cart-btn-bottom') {
-        const page= e.target.innerText || 1;
-        const pageButton=document.querySelector(' div .pagination');
-        pageButton.innerHTML=` `;
-            axios.post('http://localhost:3033/cartPage',{page:page})
-            .then(products=>{
+    if (e.target.className == 'cart-holder' || e.target.className == 'cart-bottom' || e.target.className == 'cart-btn-bottom') {
+        const page = 1;
+        let cartTable = document.getElementById('cart-table').childElementCount;
+        console.log('table', cartTable);
+        const pageButton = document.querySelector(' div .pagination');
+
+        axios.post('http://localhost:3033/cartPageByPage', { page: page })
+            .then(products => {
                 // console.log(products);
-                showItemOnCart(products.data.products.rows)
-                if(products.data.products.rows.length>0){
-                    console.log("logsgdsjk");
-                    if(products.data.currentPage!=1 && products.data.previousPage!=1){
-                        pageButton.innerHTML=`
+                if (cartTable == 1) {
+                    pageButton.innerHTML = ` `;
+                    showItemOnCart(products.data.products)
+                    if (products.data.products.length > 0) {
+                        // console.log("logsgdsjk");
+                        if (products.data.currentPage != 1 && products.data.previousPage != 1) {
+                            pageButton.innerHTML = `
                             <button class='pagination'>1</button>`
+                        }
+                        if (products.data.hasPreviousPage) {
+                            pageButton.innerHTML = pageButton.innerHTML +
+                                `<button class='pagination'>${products.data.previousPage}</button>`
+                        }
+                        pageButton.innerHTML = pageButton.innerHTML +
+                            `<button class='pagination'>${products.data.currentPage}</button>`
+
+                        if (products.data.hasNextPage) {
+                            pageButton.innerHTML = pageButton.innerHTML +
+                                `<button class='pagination'>${products.data.nextPage}</button>`
+                        }
+                        if (products.data.lastPage != products.data.currentPage
+                            && products.data.nextPage != products.data.lastPage) {
+                            pageButton.innerHTML = pageButton.innerHTML +
+                                `<button class='pagination'>${products.data.lastPage}</button>`
+                        }
+                        const purchaseButton = document.createElement('button')
+                        purchaseButton.classList.add('purchase-btn')
+                        purchaseButton.appendChild(document.createTextNode('Order Now'))
+
+                        document.getElementById('cart').appendChild(purchaseButton)
+                    } else {
+                        showItemOnCart(products.data.products)
                     }
-                    if(products.data.hasPreviousPage){
-                        pageButton.innerHTML=pageButton.innerHTML+ 
-                        `<button class='pagination'>${products.data.previousPage}</button>`
-                    }
-    
-                    pageButton.innerHTML=pageButton.innerHTML+
-                        `<button class='pagination active'>${products.data.currentPage}</button>`
-                    
-                    if(products.data.hasNextPage){
-                        pageButton.innerHTML=pageButton.innerHTML+ 
-                        `<button class='pagination'>${products.data.nextPage}</button>`
-                    }
-                    if(products.data.lastPage!=products.data.currentPage 
-                        && products.data.nextPage!=products.data.lastPage){
-                            pageButton.innerHTML=pageButton.innerHTML+ 
-                            `<button class='pagination'>${products.data.lastPage}</button>`
-                    }
-                    const purchaseButton=document.createElement('button')
-                    purchaseButton.classList.add('purchase-btn')
-                    purchaseButton.appendChild(document.createTextNode('Order'))
-                    console.log(purchaseButton);
-                    document.getElementById('cart').appendChild(purchaseButton)
                 }
             })
-            .catch(err=>{
-                console.log(err);
-            })
+            .catch(err => {console.log(err);})
         document.querySelector('#cart').style = "display:block;"
-        // }
-        
     }
     //closing cart slider......
     if (e.target.className=='cancel'){
@@ -90,7 +92,7 @@ parentContainer.addEventListener('click', (e) => {
     if(e.target.className=='danger-btn'){
         const id = e.target.parentNode.lastElementChild.id;
         const tr = e.target.parentNode.parentNode;
-        // console.log(tr);
+        console.log(id);
         axios.post('http://localhost:3033/delete-cart-item',{productId:id})
         .then(remainProduct=>{
             // removeFromCart(id,tr,remainProduct.data);
@@ -101,38 +103,38 @@ parentContainer.addEventListener('click', (e) => {
             console.log(err);
         })
     }
+
+    //pagination
     if(e.target.className=='pagination'){
         const page=e.target.innerText;
-        
-        // if(page.length>2){
-        //     console.log('click on page button');
-        // }
-        // else{
-        //     axios.post('http://localhost:3033/cartPage',{page:page})
-        //     .then(products=>{
-        //         // console.log(products);
-        //         showItemOnCart(products.data.products.rows)
-        //     })
-        //     .catch(err=>{
-        //         console.log(err);
-        //     })  
-        // }
-        
-    // document.querySelector('#cart').style = "display:block";
+        console.log(page);
+        if(page.length<2){
+            if(page<=1){
+                //it wil show the first PAge of cart
+            }
+            else{
+                axios.post('http://localhost:3033/cartPageByPage',{page:page})
+                .then(products=>{
+                    showItemOnCart(products.data.products)
+                })
+                .catch(err=>{console.log(err);})  
+            }
+        }
     }
+
+    //craeting Order
     if(e.target.className=='purchase-btn'){
         axios.post('http://localhost:3033/createOrder')
             .then(totalPrice=>{
-                totalPrice=totalPrice.data
+                // totalPrice=totalPrice.data
                 console.log(totalPrice);
-                alert(`order placed worth ${totalPrice}`)
+                // alert(`order placed worth ${totalPrice}`)
             })
-            .catch(err=>{
-                console.log(err);
-            })
+            .catch(err=>{console.log(err);})
     }
 
 })
+
 
 
 
@@ -195,15 +197,13 @@ parentContainer.addEventListener('click', (e) => {
 
 
 // }
+
 function addToCart(id){
     axios.post('http://localhost:3033/cart',{prodId:id})
         .then(data=>{
-            // console.log("addto",data);
             showItemOnCart(data.data)
         })
-        .catch(err=>{
-            console.log(err);
-        })
+        .catch(err=>{console.log(err);})
 }
 function notification(id){
     //getting product name
@@ -228,7 +228,7 @@ function showItemOnCart(products) {
         // const img_src = product.imageUrl;
         const name = product.title;
         const price = product.price;
-        const quantity = product.qty;
+        const quantity = product.cartItem.quantity;
         const tr = document.createElement('tr')
         tr.innerHTML = `
                 <td>${name}</td>
@@ -238,7 +238,7 @@ function showItemOnCart(products) {
                     <button id=${product.id} class="danger-btn">
                         X</button>
                 </td>`
-        total_cart_price = +total_cart_price + quantity * price;
+        total_cart_price = +total_cart_price + (quantity * price);
         cartTable.appendChild(tr);
     })
     document.querySelector('#total-value').innerText = parseFloat(+total_cart_price).toFixed(2)
